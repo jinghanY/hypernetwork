@@ -21,7 +21,7 @@ def parse_args():
 	parser.add_argument('--window-size', type=int, default=10, help='Context size for optimization. Default is 10')
 	parser.add_argument('--iter', default=1, type=int, help='Number of epochs in SGD')
 	parser.add_argument('--workers', type=int, default=8, help='Number of parallel workers, Default is 8.')
-	parser.add_argument('--output', nargs='?', default='karate.emb', help='Embeddings path')
+	parser.add_argument('--output', nargs='?', default='karate_small.emb', help='Embeddings path')
 	return parser.parse_args()
 
 
@@ -35,31 +35,18 @@ def learn_embedding(walks):
 	return
 
 def main(args):
-	data_path = "/project/tantra/jinghanY/hypernet/dataset/drugSub_25/NDC-substances"
+	data_path = "/project/tantra/jinghanY/hypernet/dataset/email-Eu-full"
 	fileName_simplices_tuple = data_path + "/simplices_tuple.pickle"
 	
-	with open(fileName_simplices_tuple, 'rb') as f:
-		simplices_tuple = pickle.load(f)
 	
-	fileName_nverts = data_path + "/nverts.pickle"
+	fileName_nverts = data_path + "/nverts_small.pickle"
 	with open(fileName_nverts,'rb') as f:
 		nverts = pickle.load(f)
 	
-	fileName_simplices = data_path + "/simplices.pickle"
+	fileName_simplices = data_path + "/simplices_small.pickle"
 	with open(fileName_simplices,'rb') as f:
 		simplices= pickle.load(f)
 	
-	# just for test
-	a = math.ceil(len(nverts)*0.6)
-	b = math.ceil(len(nverts)*0.6)
-	c = math.ceil(len(nverts)*0.6)
-	nverts = nverts[:a]
-	simplices = simplices[:b]
-	simplices_tuple = simplices_tuple[:c]
-
-	# end for test
-	
-
 	num_nverts = max(simplices)
 	num_simplices = len(nverts)
 	a = hy.Hypernetwork(nverts, simplices)

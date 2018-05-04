@@ -26,32 +26,38 @@ def simplices_to_nverts(nverts, simplices):
 	print(t)
 	return t
 
+def compress_hypernets(nverts, simplices, num):
+	'''
+	num = how many nverts that we want to use for training and testing. 
+	'''
+	nverts = nverts[:num]
+	num_simplices = sum(nverts)
+	simplices = simplices[:num_simplices]
+	return nverts, simplices
 
 # write down tuple using pickle
 
 if __name__ == "__main__":
 	#hm_path = "/project/tantra/jinghanY/hypernet/dataset/drugSub_25/NDC-substances/test"
-	hm_path = "/project/tantra/jinghanY/hypernet/dataset/drugSub_25/NDC-substances"
-	fileName_nverts = hm_path +"/NDC-substances-nverts.txt"
-	fileName_simplices = hm_path+"/NDC-substances-simplices.txt"
+	hm_path = "/project/tantra/jinghanY/hypernet/dataset/email-Eu-full"
+	fileName_nverts = hm_path +"/email-Eu-full-nverts.txt"
+	fileName_simplices = hm_path+"/email-Eu-full-simplices.txt"
 	nverts = read_file(fileName_nverts)
 	simplices = read_file(fileName_simplices)
-	simplices_tuple = simplices_to_nverts(nverts, simplices)
+	#simplices_tuple = simplices_to_nverts(nverts, simplices)
 
-
-	fileName_nverts = hm_path + "/nverts.pickle"
+	[nverts, simplices]=compress_hypernets(nverts, simplices,2000)
+	fileName_nverts = hm_path + "/nverts_small.pickle"
 	with open(fileName_nverts,'wb') as f:
 		pickle.dump(nverts, f)
 	
-	fileName_simplices = hm_path + "/simplices.pickle"
+	fileName_simplices = hm_path + "/simplices_small.pickle"
 	with open(fileName_simplices, 'wb') as f:
 		pickle.dump(simplices, f)
 
-	fileName_simplices_tuple = hm_path + "/simplices_tuple.pickle"
-	with open(fileName_simplices_tuple, 'wb') as f:
-		pickle.dump(simplices_tuple, f)
-	with open(fileName_simplices_tuple, 'rb') as f:
-		data = pickle.load(f)
+	#fileName_simplices_tuple = hm_path + "/simplices_tuple.pickle"
+	#with open(fileName_simplices_tuple, 'wb') as f:
+	#	pickle.dump(simplices_tuple, f)
 
 
 
